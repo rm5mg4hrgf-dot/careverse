@@ -9,9 +9,9 @@ CAREVERSE is a static, browser-based hospital workflow simulation prototype for 
 This is a plain static website: no Node.js build, package installation, server, API key, or backend is required.
 
 1. Open **Settings → Pages** in this repository.
-2. Under **Build and deployment**, choose **Deploy from a branch**.
-3. Select branch **main** and folder **/(root)**, then save.
-4. Wait for the Pages deployment to finish. The entry point is the root `index.html`.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Commit or push to `main`; the included workflow validates the HTML/JavaScript and deploys the static site automatically.
+4. Open the **Actions** tab and wait for **CAREVERSE — Validate and Deploy** to finish successfully. The entry point is the root `index.html`.
 
 Expected project URL: https://rm5mg4hrgf-dot.github.io/careverse/
 
@@ -36,4 +36,4 @@ Expected project URL: https://rm5mg4hrgf-dot.github.io/careverse/
 
 ## Verification
 
-The root entry point is a self-contained HTML/CSS/JavaScript app designed for GitHub Pages. A production build is not required. Verify deployment from **Settings → Pages** and test the live page in a browser; no automated browser test suite is currently included.
+The included GitHub Actions workflow checks the HTML entry point, detects duplicate IDs, checks inline JavaScript syntax with Node.js, verifies key app markers, and deploys the root directory to GitHub Pages. This is static validation, not a full automated browser or clinical validation suite. After deployment, manually test the interactive flows in a browser.
