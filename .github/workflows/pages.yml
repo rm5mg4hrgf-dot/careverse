@@ -1,0 +1,104 @@
+name: CAREVERSE — Validate and Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate HTML structure and JavaScript syntax
+        shell: bash
+        run: |
+          test -s index.html
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re
+
+          html = Path("index.html").read_text(encoding="utf-8")
+          assert html.lstrip().lower().startswith("<!doctype html>"), "Missing HTML5 doctype"
+          assert "</html>" in html.lower(), "Missing closing html tag"
+          assert '<meta charset="utf-8">' in html.lower(), "Missing UTF-8 declaration"
+          assert "<title>" in html.lower(), "Missing page title"
+
+          class Checker(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True)
+                  self.ids = set()
+                  self.duplicates = []
+                  self.scripts = 0
+                  self.in_script = False
+                  self.script_text = []
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  value = attrs.get("id")
+                  if value:
+                      if value in self.ids:
+                          self.duplicates.append(value)
+                      self.ids.add(value)
+                  if tag == "script":
+                      self.scripts += 1
+                      self.in_script = True
+
+              def handle_endtag(self, tag):
+                  if tag == "script":
+                      self.in_script = False
+
+              def handle_data(self, data):
+                  if self.in_script:
+                      self.script_text.append(data)
+
+          parser = Checker()
+          parser.feed(html)
+          assert not parser.duplicates, f"Duplicate HTML IDs: {parser.duplicates}"
+          assert parser.scripts == 1, f"Expected one inline application script, found {parser.scripts}"
+          Path("/tmp/careverse-app.js").write_text("\n".join(parser.script_text), encoding="utf-8")
+          print(f"HTML structure OK; {len(parser.ids)} unique IDs found.")
+          PY
+          node --check /tmp/careverse-app.js
+          echo "JavaScript syntax OK."
+      - name: Verify static entry point
+        run: |
+          grep -q 'CAREVERSE' index.html
+          grep -q 'function runScenario' index.html
+          grep -q 'function renderExperiment' index.html
+          grep -q 'exportCsv' index.html
+          echo "Required app markers found."
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
