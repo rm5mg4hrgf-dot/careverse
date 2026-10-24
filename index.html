@@ -130,24 +130,30 @@ a{color:#a6e4ff}
 @media(prefers-reduced-motion:reduce){body:before,.landscape-art *{animation:none!important}}
 
 
-/* CAREVERSE living landscape backdrop */
-#cv-landscape{position:fixed;inset:-2.5%;width:105%;height:105%;object-fit:cover;z-index:-3;pointer-events:none;opacity:.7;filter:saturate(1.25) hue-rotate(var(--scene-hue,0deg));transform:translate3d(calc(var(--pointer-x,0)*-10px),calc(var(--pointer-y,0)*-8px),0) scale(1.025);transition:filter .7s ease,opacity .5s ease;will-change:transform}
-#cv-landscape-shade{position:fixed;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(115deg,rgba(5,12,28,.86),rgba(7,17,31,.52) 46%,rgba(23,10,42,.58)),radial-gradient(ellipse at 18% 15%,rgba(69,224,194,.16),transparent 38%),radial-gradient(ellipse at 86% 22%,rgba(182,156,255,.2),transparent 36%),linear-gradient(180deg,rgba(5,12,28,.18),rgba(5,12,28,.75))}
-#cv-motion-toggle{position:fixed;right:18px;bottom:18px;z-index:50;border:1px solid rgba(151,220,255,.42);border-radius:999px;padding:10px 14px;color:#f5fbff;background:linear-gradient(115deg,rgba(22,45,76,.94),rgba(79,34,104,.9));box-shadow:0 8px 32px rgba(0,0,0,.28),0 0 24px rgba(87,185,255,.13);backdrop-filter:blur(14px);font:600 11px Inter,system-ui,sans-serif;letter-spacing:.3px}
+/* Living fantasy scenery: original Genshin-inspired painterly landscape, not a static wallpaper */
+body{isolation:isolate;background:transparent}
+#cv-landscape-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:auto;display:block}
+#cv-landscape-shade{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(105deg,rgba(4,12,31,.54),rgba(7,17,31,.20) 44%,rgba(27,10,46,.24)),linear-gradient(180deg,rgba(6,13,31,.10),rgba(5,12,28,.62))}
+.app{position:relative;z-index:1;isolation:isolate}
+.sidebar{background:rgba(7,18,39,.76)!important;backdrop-filter:blur(20px);border-right-color:rgba(128,190,255,.23)!important}
+.main{background:transparent}
+.card,.panel,.metric,.stat-card,.section-card,.widget,.tile,.surface{backdrop-filter:blur(18px);background-color:rgba(10,22,48,.68)}
+:root{--teal:#55f2d2;--cyan:#69c9ff;--amber:#ffd166;--violet:#c3a3ff;--pink:#ff91d0;--lime:#b8f76c}
+button,.btn{transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+button:hover,.btn:hover{filter:brightness(1.13);box-shadow:0 5px 24px rgba(105,201,255,.15)}
+.nav button.active{background:linear-gradient(110deg,rgba(54,224,194,.18),rgba(182,156,255,.18))!important;border-color:rgba(105,201,255,.28)!important}
+#cv-motion-toggle{position:fixed;right:18px;bottom:18px;z-index:50;border:1px solid rgba(151,220,255,.48);border-radius:999px;padding:11px 15px;color:#f5fbff;background:linear-gradient(115deg,rgba(18,90,113,.96),rgba(89,51,151,.96),rgba(150,54,128,.92));box-shadow:0 8px 32px rgba(0,0,0,.3),0 0 26px rgba(87,185,255,.18);backdrop-filter:blur(14px);font:700 11px Inter,system-ui,sans-serif;letter-spacing:.3px}
 #cv-motion-toggle:hover{transform:translateY(-2px);border-color:var(--teal)}
 #cv-motion-toggle .cv-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#6fffd8;margin-right:7px;box-shadow:0 0 12px #6fffd8}
-.app{position:relative;isolation:isolate}
-.panel,.card,.metric,.stat-card,.section-card{backdrop-filter:blur(14px)}
-@media(max-width:700px){#cv-motion-toggle{right:10px;bottom:10px;padding:9px 11px}#cv-landscape{opacity:.45}}
-@media(prefers-reduced-motion:reduce){#cv-landscape{transform:none;transition:none}#cv-motion-toggle:hover{transform:none}}
+#cv-motion-toggle .cv-dot.off{background:#ffd166;box-shadow:0 0 12px #ffd166}
+@media(max-width:700px){#cv-motion-toggle{right:10px;bottom:10px;padding:9px 11px}}
+@media(prefers-reduced-motion:reduce){#cv-motion-toggle:hover{transform:none}}
 
 </style>
 </head>
 <body>
 
-<video id="cv-landscape" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
-  <source src="https://videos.pexels.com/video-files/35568117/15070741_1920_1080_30fps.mp4" type="video/mp4">
-</video>
+<canvas id="cv-landscape-canvas" aria-hidden="true"></canvas>
 <div id="cv-landscape-shade" aria-hidden="true"></div>
 
 <div class="app">
@@ -419,31 +425,45 @@ populateSelects();renderAll();
 
 <script>
 (function(){
- const video=document.getElementById('cv-landscape');
- if(!video)return;
+ const canvas=document.getElementById('cv-landscape-canvas');if(!canvas)return;
+ const ctx=canvas.getContext('2d');if(!ctx)return;
  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const btn=document.createElement('button');
- btn.id='cv-motion-toggle';btn.type='button';btn.setAttribute('aria-pressed','true');
- btn.innerHTML='<span class="cv-dot"></span>Landscape motion: ON';
- btn.addEventListener('click',function(){
-   if(video.paused){video.play().catch(function(){});btn.innerHTML='<span class="cv-dot"></span>Landscape motion: ON';btn.setAttribute('aria-pressed','true');}
-   else{video.pause();btn.innerHTML='Landscape motion: OFF';btn.setAttribute('aria-pressed','false');}
- });
- document.body.appendChild(btn);
- if(!reduce){
-   let scheduled=false,lastX=0,lastY=0;
-   document.addEventListener('pointermove',function(e){
-     lastX=(e.clientX/window.innerWidth-.5)*2;
-     lastY=(e.clientY/window.innerHeight-.5)*2;
-     if(scheduled)return;scheduled=true;
-     requestAnimationFrame(function(){
-       document.documentElement.style.setProperty('--pointer-x',lastX.toFixed(2));
-       document.documentElement.style.setProperty('--pointer-y',lastY.toFixed(2));
-       scheduled=false;
-     });
-   },{passive:true});
+ let w=0,h=0,dpr=1,frame=0,running=!reduce,px=0,py=0,targetX=0,targetY=0,clicks=[];
+ const stars=Array.from({length:110},()=>({x:Math.random(),y:Math.random()*.62,r:.5+Math.random()*1.6,p:Math.random()*6.28,s:.3+Math.random()*1.4}));
+ const motes=Array.from({length:72},()=>({x:Math.random(),y:.28+Math.random()*.68,r:1+Math.random()*2.3,vx:(Math.random()-.5)*.00012,vy:-(.00008+Math.random()*.00022),p:Math.random()*6.28,h:Math.random()<.45?175:Math.random()<.5?280:42}));
+ function resize(){dpr=Math.min(window.devicePixelRatio||1,1.7);w=innerWidth;h=innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);draw(true)}
+ function path(points,fill){ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.closePath();ctx.fillStyle=fill;ctx.fill()}
+ function mountain(base,amp,period,phase,fill,shift){ctx.beginPath();ctx.moveTo(-50,h);for(let x=-50;x<=w+60;x+=8){let y=base+Math.sin(x/period+phase)*amp+Math.sin(x/(period*.48)+phase*1.8)*amp*.28;ctx.lineTo(x+shift,y)}ctx.lineTo(w+80,h);ctx.closePath();ctx.fillStyle=fill;ctx.fill()}
+ function cloud(x,y,s,a){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.globalAlpha=a;let g=ctx.createLinearGradient(0,-24,0,18);g.addColorStop(0,'rgba(241,233,255,.72)');g.addColorStop(1,'rgba(143,181,244,.10)');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(0,0,63,15,0,0,Math.PI*2);ctx.ellipse(-25,-7,28,17,0,0,Math.PI*2);ctx.ellipse(7,-14,34,23,0,0,Math.PI*2);ctx.ellipse(36,-4,27,14,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+ function island(x,y,s,t){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='rgba(23,39,76,.92)';ctx.beginPath();ctx.moveTo(-74,0);ctx.quadraticCurveTo(0,-28,74,0);ctx.lineTo(19,67);ctx.lineTo(-8,43);ctx.lineTo(-25,72);ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(126,227,226,.55)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-55,3);ctx.quadraticCurveTo(0,-17,55,3);ctx.stroke();ctx.fillStyle='#42c9ac';ctx.beginPath();ctx.ellipse(-20,-13,17,7,-.4,0,Math.PI*2);ctx.ellipse(13,-17,23,8,.25,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffe0a0';ctx.shadowColor='#ffe0a0';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(0,-25+Math.sin(t*.03)*2,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.restore()}
+ function draw(staticFrame){if(!w||!h)return;frame++;ctx.clearRect(0,0,w,h);const t=staticFrame?frame:frame,parX=px*24,parY=py*12;
+  const sky=ctx.createLinearGradient(0,0,w*.2,h);sky.addColorStop(0,'#101c50');sky.addColorStop(.36,'#454b91');sky.addColorStop(.66,'#c17cb2');sky.addColorStop(1,'#f3b98b');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+  let glow=ctx.createRadialGradient(w*.73-parX*.2,h*.30,2,w*.73-parX*.2,h*.30,Math.max(w,h)*.58);glow.addColorStop(0,'rgba(255,222,167,.48)');glow.addColorStop(.26,'rgba(255,157,191,.17)');glow.addColorStop(1,'rgba(255,157,191,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+  stars.forEach(s=>{let a=.22+.55*(.5+.5*Math.sin(t*.025*s.s+s.p));ctx.globalAlpha=a;ctx.fillStyle='#fff4d2';ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.r,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;
+  for(let i=0;i<5;i++){let x=((i*.27+t*(.000035+i*.000006))%1.5-0.2)*w;cloud(x,h*(.18+(i%3)*.09)+Math.sin(t*.009+i)*7,.6+(i%3)*.27,.16+(i%2)*.09)}
+  const sunX=w*.73-parX*.25,sunY=h*.30-parY*.15;let sun=ctx.createRadialGradient(sunX,sunY,2,sunX,sunY,70);sun.addColorStop(0,'#fff6d9');sun.addColorStop(.25,'rgba(255,223,173,.8)');sun.addColorStop(1,'rgba(255,199,197,0)');ctx.fillStyle=sun;ctx.beginPath();ctx.arc(sunX,sunY,70,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffe8bd';ctx.beginPath();ctx.arc(sunX,sunY,22,0,Math.PI*2);ctx.fill();
+  mountain(h*.53,48,210,.2,'#656fb0',-parX*.25);mountain(h*.58,61,160,2.1,'#485f9d',-parX*.45);mountain(h*.68,50,120,1.4,'#345a87',-parX*.72);
+  // Snowcaps on the distant fantasy peaks
+  ctx.fillStyle='rgba(226,239,255,.82)';for(let i=0;i<7;i++){let x=(i/6)*w+Math.sin(i*2)*22,y=h*.53+Math.sin(x/210+.2)*48-23;ctx.beginPath();ctx.moveTo(x-16,y+10);ctx.lineTo(x,y-13);ctx.lineTo(x+17,y+10);ctx.lineTo(x+5,y+5);ctx.lineTo(x,y+9);ctx.lineTo(x-5,y+5);ctx.closePath();ctx.fill()}
+  mountain(h*.78,45,175,3.2,'#244e78',-parX);mountain(h*.88,48,125,1.2,'#173f61',-parX*1.25);
+  island(w*.22-parX*.7,h*.39-parY*.3,.65+Math.min(w,h)/1800,t);island(w*.87-parX*.85,h*.48-parY*.4,.4+Math.min(w,h)/2800,t+60);
+  // Luminous river / magical winding trail through the valley
+  ctx.save();ctx.globalAlpha=.62;ctx.strokeStyle='#69f4e5';ctx.shadowColor='#69f4e5';ctx.shadowBlur=16;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(w*.18,h);ctx.bezierCurveTo(w*.38,h*.86,w*.28,h*.77,w*.51,h*.83);ctx.bezierCurveTo(w*.67,h*.88,w*.67,h*.73,w*.83,h*.70);ctx.stroke();ctx.shadowBlur=0;ctx.restore();
+  // Layered storybook foreground
+  mountain(h*.94,30,190,1.7,'#163d51',-parX*1.7);
+  for(let i=0;i<10;i++){let x=((i*.13+t*.00018)%1.3-.12)*w;let y=h*(.71+(i%4)*.065)+Math.sin(t*.015+i)*3;ctx.save();ctx.translate(x-parX*.8,y);let s=.45+(i%3)*.18;ctx.scale(s,s);ctx.fillStyle=i%2?'#123b49':'#16484d';ctx.beginPath();ctx.moveTo(0,-54);ctx.lineTo(-24,0);ctx.lineTo(24,0);ctx.closePath();ctx.fill();ctx.fillStyle='#2a8b76';ctx.beginPath();ctx.moveTo(0,-39);ctx.lineTo(-17,-7);ctx.lineTo(17,-7);ctx.closePath();ctx.fill();ctx.restore()}
+  motes.forEach(m=>{m.x+=m.vx;m.y+=m.vy;if(m.y<.12){m.y=.98;m.x=Math.random()}if(m.x<0)m.x=1;if(m.x>1)m.x=0;let a=.25+.7*(.5+.5*Math.sin(t*.035+m.p));ctx.globalAlpha=a;ctx.fillStyle='hsl('+m.h+',90%,75%)';ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=10;ctx.beginPath();ctx.arc(m.x*w,m.y*h,m.r*(.7+.3*Math.sin(t*.02+m.p)),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});ctx.globalAlpha=1;
+  clicks=clicks.filter(c=>t-c.t<55);clicks.forEach(c=>{let k=(t-c.t)/55;ctx.strokeStyle='rgba(141,255,232,'+(1-k)+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(c.x,c.y,k*72,0,Math.PI*2);ctx.stroke()});
+  // Soft vignette keeps the scenery atmospheric beneath the UI.
+  let vig=ctx.createRadialGradient(w*.5,h*.44,Math.min(w,h)*.16,w*.5,h*.44,Math.max(w,h)*.72);vig.addColorStop(0,'rgba(9,15,39,.03)');vig.addColorStop(1,'rgba(5,11,31,.48)');ctx.fillStyle=vig;ctx.fillRect(0,0,w,h);
+  if(running&&!reduce)requestAnimationFrame(()=>draw(false));
  }
- video.addEventListener('error',function(){video.style.opacity='.25';});
+ const btn=document.createElement('button');btn.id='cv-motion-toggle';btn.type='button';btn.setAttribute('aria-pressed',String(running));btn.innerHTML='<span class="cv-dot"></span>Fantasy world: '+(running?'ON':'OFF');document.body.appendChild(btn);
+ btn.addEventListener('click',function(){running=!running;btn.setAttribute('aria-pressed',String(running));btn.innerHTML=running?'<span class="cv-dot"></span>Fantasy world: ON':'<span class="cv-dot off"></span>Fantasy world: OFF';if(running)draw(false)});
+ canvas.addEventListener('pointermove',e=>{targetX=(e.clientX/w-.5)*2;targetY=(e.clientY/h-.5)*2;px+=(targetX-px)*.07;py+=(targetY-py)*.07;});
+ canvas.addEventListener('click',e=>{clicks.push({x:e.clientX,y:e.clientY,t:frame});if(!running){draw(true)}});
+ if(!reduce){let last=0;function animateParallax(){if(!running)return;px+=(targetX-px)*.025;py+=(targetY-py)*.025;if(performance.now()-last>30){last=performance.now();draw(false)}else requestAnimationFrame(animateParallax)}}
+ window.addEventListener('resize',resize);resize();if(running&&!reduce)draw(false);
 })();
 </script>
 
