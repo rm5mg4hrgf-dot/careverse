@@ -547,13 +547,13 @@ populateSelects();renderAll();
   clicks=clicks.filter(c=>t-c.t<55);clicks.forEach(c=>{let k=(t-c.t)/55;ctx.strokeStyle='rgba(255,255,255,'+(1-k)+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(c.x,c.y,k*72,0,Math.PI*2);ctx.stroke()});
   // Soft vignette keeps the scenery atmospheric beneath the UI.
   let vig=ctx.createRadialGradient(w*.5,h*.44,Math.min(w,h)*.16,w*.5,h*.44,Math.max(w,h)*.72);vig.addColorStop(0,'rgba(255,255,255,.01)');vig.addColorStop(1,'rgba(78,76,96,.18)');ctx.fillStyle=vig;ctx.fillRect(0,0,w,h);
-  if(running&&!reduce)requestAnimationFrame(()=>draw(false));
+  if(!staticFrame&&running&&!reduce)requestAnimationFrame(()=>draw(false));
  }
  const btn=document.createElement('button');btn.id='cv-motion-toggle';btn.type='button';btn.setAttribute('aria-pressed',String(running));btn.innerHTML='<span class="cv-dot"></span>Fantasy world: '+(running?'ON':'OFF');document.body.appendChild(btn);
  btn.addEventListener('click',function(){running=!running;btn.setAttribute('aria-pressed',String(running));btn.innerHTML=running?'<span class="cv-dot"></span>Fantasy world: ON':'<span class="cv-dot off"></span>Fantasy world: OFF';if(running)draw(false)});
  document.addEventListener('pointermove',e=>{targetX=(e.clientX/w-.5)*2;targetY=(e.clientY/h-.5)*2;},{passive:true});
  document.addEventListener('click',e=>{if(e.target.closest('#cv-motion-toggle'))return;clicks.push({x:e.clientX,y:e.clientY,t:frame});if(!running){draw(true)}});
- if(!reduce){let last=0;function animateParallax(){if(!running)return;px+=(targetX-px)*.025;py+=(targetY-py)*.025;if(performance.now()-last>30){last=performance.now();draw(false)}else requestAnimationFrame(animateParallax)}}
+
  window.addEventListener('resize',resize);resize();if(running&&!reduce)draw(false);
 })();
 </script>
