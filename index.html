@@ -471,8 +471,10 @@ function restoreState(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)
 restoreState();populateSelects();$('seedInput').value=state.seed;$('pace').value=state.pace;renderAll();persistState();go('command');toast('Local session reset.')};
 $('cartoonPlay').onclick=playCartoon;$('cartoonRestart').onclick=()=>{stopCartoon();cartoonStep=0;$('cartoonStage').classList.remove('paused');updateCartoon(0)};
 populateSelects();renderAll();
-</script>
-<script>
+
+;
+// Consolidated inline script boundary
+
 (function(){
  const stage=document.getElementById('cartoonStage');
  const captions=[
@@ -529,10 +531,10 @@ populateSelects();renderAll();
  });
  setScene(0,true);
 })();
-</script>
 
+;
+// Consolidated inline script boundary
 
-<script>
 (function(){
  const canvas=document.getElementById('cv-landscape-canvas');if(!canvas)return;
  const ctx=canvas.getContext('2d');if(!ctx)return;
@@ -580,10 +582,10 @@ populateSelects();renderAll();
 
  window.addEventListener('resize',resize);resize();if(running&&!reduce)draw(false);
 })();
-</script>
 
+;
+// Consolidated inline script boundary
 
-<script>
 (function(){
  if(document.getElementById('cv-medical-floaters'))return;
  const layer=document.createElement('div');layer.id='cv-medical-floaters';layer.setAttribute('aria-hidden','true');
@@ -612,4 +614,11 @@ populateSelects();renderAll();
  document.body.appendChild(layer);
 })();
 </script>
+
+
+
+
+
+
+
 </body></html>
