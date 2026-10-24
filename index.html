@@ -234,6 +234,30 @@ small,.small,.caption,.meta,.label{color:#675a70}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media(max-width:760px){.sidebar{border-radius:0 0 22px 22px!important;clip-path:inset(0 round 0 0 22px 22px)}}
 
+
+/* Cool aurora typography and high-contrast navigation */
+:root{--text:#f4f7ff;--muted:#d1d9f0;--teal:#73f4d4;--cyan:#8ee8ff;--violet:#b8a0ff;--pink:#ffb0dc;--line:rgba(255,255,255,.55)}
+/* Make sidebar a deep amethyst glass capsule so labels never wash out */
+.sidebar{background:linear-gradient(155deg,rgba(30,34,66,.94),rgba(49,39,83,.92) 55%,rgba(35,65,86,.91))!important;border-right:1px solid rgba(211,211,255,.32)!important;border-radius:0 28px 28px 0!important;box-shadow:10px 0 42px rgba(24,23,62,.22),inset -1px 0 0 rgba(255,255,255,.14)!important}
+.sidebar .brand-name,.sidebar .brand strong,.sidebar .brand h1,.sidebar .brand h2{color:#fff!important;text-shadow:0 1px 12px rgba(170,156,255,.25)}
+.sidebar .nav,.sidebar nav,.sidebar .nav-group,.sidebar .workspace-label,.sidebar .section-label{color:#dbe4ff!important}
+.sidebar .nav button,.sidebar .nav a,.sidebar button{color:#e5eaff!important;background:rgba(255,255,255,.055)!important;border:1px solid rgba(255,255,255,.08)!important}
+.sidebar .nav button:hover,.sidebar .nav a:hover,.sidebar button:hover{color:#fff!important;background:rgba(174,160,255,.18)!important}
+.sidebar .nav button.active,.sidebar .nav a.active{color:#fff!important;background:linear-gradient(110deg,rgba(142,232,255,.28),rgba(184,160,255,.34),rgba(255,176,220,.23))!important;border:1px solid rgba(221,223,255,.52)!important;box-shadow:0 7px 22px rgba(13,17,47,.16),inset 0 1px 0 rgba(255,255,255,.2)!important}
+.sidebar .muted,.sidebar small,.sidebar p,.sidebar span{ text-shadow:none}
+body{color:#423449}
+h1,.hero h1,.page-title,.title-gradient{background:linear-gradient(100deg,#fff 0%,#e8faff 24%,#d9ccff 52%,#ffcee9 78%,#fff0c9 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;text-shadow:0 2px 22px rgba(106,91,183,.14)}
+/* Explicit text colors for content sitting on glass */
+p,.subtitle,.description,.muted,.helper,.breadcrumb,.eyebrow{color:#51455d}
+.card p,.panel p,.widget p,.section-card p,.tile p,.surface p,.card label,.panel label{color:#51445b}
+.card h1,.card h2,.card h3,.panel h1,.panel h2,.panel h3,.widget h1,.widget h2,.widget h3{background:linear-gradient(100deg,#4d3b66,#76528f 55%,#a34e82);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+.card,.panel,.metric,.stat-card,.section-card,.widget,.tile,.surface,.main-card,.content-card,.scenario-card,.network-panel,.simulation-card{color:#43354c}
+.card strong,.panel strong,.widget strong,.metric strong,.stat-card strong{color:#493958}
+.card .muted,.panel .muted,.widget .muted,.meta,.caption,small{color:#6b5d77}
+.badge,.pill,.status,.chip{color:#365e64}
+button,.btn{color:#493751}
+#cv-motion-toggle{color:#493751}
+
 </style>
 </head>
 <body>
