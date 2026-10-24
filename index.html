@@ -175,7 +175,7 @@ button:hover,.btn:hover{box-shadow:0 5px 24px rgba(255,158,181,.25)}
 /* LIQUID GLASS + hand-drawn animated medical objects */
 :root{color-scheme:light;--bg:#fff8f5;--panel:rgba(255,255,255,.34);--panel2:rgba(255,255,255,.48);--line:rgba(255,255,255,.68);--text:#44363f;--muted:#826f78;--teal:#53bfa6;--cyan:#81cfc3;--amber:#ffbf70;--red:#ed7f8f;--violet:#b49be9;--pink:#f39db6;--lime:#a9d995;--radius:22px}
 body{background:transparent;color:var(--text)}
-#cv-landscape-shade{background:linear-gradient(105deg,rgba(255,249,241,.18),rgba(255,242,235,.05) 52%,rgba(255,226,237,.11)),linear-gradient(180deg,rgba(255,250,240,.00),rgba(250,240,231,.16))}
+#cv-landscape-shade{background:linear-gradient(105deg,rgba(255,250,246,.32),rgba(255,248,244,.18) 52%,rgba(255,241,246,.25)),linear-gradient(180deg,rgba(255,252,248,.05),rgba(250,244,240,.24))}
 .sidebar{background:rgba(255,255,255,.24)!important;backdrop-filter:blur(28px) saturate(165%)!important;-webkit-backdrop-filter:blur(28px) saturate(165%)!important;border-right:1px solid rgba(255,255,255,.62)!important;box-shadow:8px 0 36px rgba(102,78,100,.06),inset -1px 0 0 rgba(255,255,255,.25)}
 .card,.panel,.metric,.stat-card,.section-card,.widget,.tile,.surface,.main-card,.content-card,.modal,.dropdown,.table-wrap{background:linear-gradient(135deg,rgba(255,255,255,.56),rgba(255,255,255,.23))!important;background-color:rgba(255,255,255,.27)!important;backdrop-filter:blur(26px) saturate(170%)!important;-webkit-backdrop-filter:blur(26px) saturate(170%)!important;border:1px solid rgba(255,255,255,.66)!important;box-shadow:0 12px 36px rgba(95,72,93,.09),inset 0 1px 0 rgba(255,255,255,.72),inset 0 -1px 0 rgba(255,255,255,.12)!important;border-radius:var(--radius)}
 input,select,textarea{background:rgba(255,255,255,.48)!important;color:#493b43!important;border:1px solid rgba(255,255,255,.78)!important;backdrop-filter:blur(14px);border-radius:12px}
@@ -202,6 +202,37 @@ button:hover,.btn:hover{box-shadow:0 8px 24px rgba(226,157,171,.22);transform:tr
 @keyframes liquid-sway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
 @media(max-width:700px){.cv-med-floater{width:53px;height:53px;opacity:.55}}
 @media(prefers-reduced-motion:reduce){.cv-med-floater,.cv-med-floater *{animation:none!important}}
+
+
+/* Smoothness, legibility, and consistent rounded liquid-glass geometry */
+:root{--radius:22px;--text:#352d3b;--muted:#5f5365;--line:rgba(255,255,255,.78)}
+html{scroll-behavior:smooth}
+body{color:#352d3b;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.app{gap:0}
+.sidebar{border-radius:0 26px 26px 0!important;overflow:hidden;clip-path:inset(0 round 0 26px 26px 0);padding:22px 14px 28px!important}
+.brand,.nav,.nav-group,.sidebar-footer{border-radius:18px}
+.nav button,.nav a,.sidebar button{border-radius:15px!important;overflow:hidden}
+.nav button.active{border-radius:15px!important}
+.main,.content,.workspace,.main-content{min-width:0}
+.card,.panel,.metric,.stat-card,.section-card,.widget,.tile,.surface,.main-card,.content-card,.modal,.dropdown,.table-wrap,.scenario-card,.network-panel,.simulation-card,section,article{border-radius:22px!important;overflow:hidden}
+button,.btn,input,select,textarea{border-radius:14px}
+h1,h2,h3,h4,.brand-name,.nav button{color:#3f3341}
+p,.subtitle,.description,.muted,.helper,.breadcrumb,.eyebrow{color:#65576b}
+h1{letter-spacing:-.035em;text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.card p,.panel p,.widget p,.section-card p,.tile p,.surface p{color:#514653}
+.card h1,.card h2,.card h3,.panel h1,.panel h2,.panel h3,.widget h1,.widget h2,.widget h3{color:#423344}
+.nav button,.nav a{color:#4b3d50!important}
+.nav button.active{color:#493548!important}
+input,select,textarea{color:#413344!important}
+input::placeholder,textarea::placeholder{color:#78687e!important;opacity:1}
+.badge,.pill,.status,.chip{font-weight:750}
+small,.small,.caption,.meta,.label{color:#675a70}
+#cv-landscape-canvas{will-change:transform;transform:translateZ(0)}
+#cv-medical-floaters{perspective:900px}
+.cv-med-floater{backface-visibility:hidden;transform:translateZ(0);contain:layout style;opacity:.67!important}
+.cv-med-floater svg{filter:drop-shadow(0 2px 1px rgba(255,255,255,.55))}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:760px){.sidebar{border-radius:0 0 22px 22px!important;clip-path:inset(0 round 0 0 22px 22px)}}
 
 </style>
 </head>
