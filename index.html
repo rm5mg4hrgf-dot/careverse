@@ -81,6 +81,54 @@ body{background-color:#fff9f0;background-image:radial-gradient(#c8d5f3 1.2px,tra
 @media(max-width:720px){.cartoon-world.live-world{height:240px;margin:0 6px}.scene-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 8px}.scene-action{min-height:57px}.scene-speech{left:7%;top:8%;max-width:66%;font-size:10px}.scene-live-badge{right:7px;top:7px;font-size:8px}.hospital-art{width:150%;max-width:none;transform:translateX(-16%)}}
 @media(prefers-reduced-motion:reduce){.hospital-art *, .cartoon-stage *, .scene-action,.panel{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 
+
+/* COOL LANDSCAPE ART DIRECTION — layered, moving, low-glare */
+:root{--bg:#10182f;--panel:#172642;--panel2:#1e3152;--line:#33496e;--text:#e8f3ff;--muted:#a4bad8}
+html{background:#0c1429}
+body{color:#e8f3ff;background:#0c1429;background-image:none;position:relative;isolation:isolate}
+body:before{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;background:radial-gradient(ellipse at 15% 12%,#254a78 0,transparent 38%),radial-gradient(ellipse at 88% 23%,#3a2869 0,transparent 34%),linear-gradient(180deg,#101a35 0%,#152746 48%,#10283a 100%);background-size:150% 150%;animation:sky-drift 28s ease-in-out infinite alternate}
+body:after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.27;background-image:radial-gradient(#91c7ff 1px,transparent 1.5px);background-size:38px 38px;mask-image:linear-gradient(to bottom,black,transparent 75%)}
+.content{position:relative;z-index:1}
+.headrow h1,.headrow h2,.headrow h3,.panel h2,.panel h3{color:#f0f7ff}
+.sub,.muted,.metricfoot,.metric-label{color:#b0c4e2}
+.panel,.metric,.card,.modal,.dropdown,.table-wrap{background:linear-gradient(145deg,rgba(29,48,80,.97),rgba(19,34,59,.97));border-color:#3b5279;color:#e8f3ff}
+.panel{box-shadow:4px 5px 0 rgba(5,10,24,.65)}
+.panel:hover{box-shadow:6px 7px 0 rgba(5,10,24,.8)}
+input,select,textarea{background:#101c35!important;color:#e8f3ff!important;border-color:#48648e!important}
+input::placeholder,textarea::placeholder{color:#91a9cb!important}
+.btn{background:#a7e5e1;color:#14263f;border-color:#253a5c}
+.btn.secondary,.btn.ghost{background:#263d62;color:#e8f3ff;border-color:#49648c}
+.tag{background:#273f65;color:#d6e9ff;border-color:#4a6792}
+.tag.critical{background:#5c2b51;color:#ffdce9}
+.tag.warn{background:#634b28;color:#ffebba}
+.nav,.sidebar,.topbar,.header,.toolbar{background:rgba(13,24,46,.9);border-color:#30466b}
+a{color:#a6e4ff}
+.cartoon-stage{background:linear-gradient(155deg,#203c66,#1a2b4d 65%,#153c49);border-color:#8eb7ef}
+.cartoon-world.live-world{position:relative;background:linear-gradient(180deg,#223e69 0%,#527eaa 44%,#7baac0 58%,#5da18f 59%,#2e6c68 100%);border-color:#9bcaff;box-shadow:inset 0 0 40px #10264480}
+.cartoon-world.live-world:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,transparent 60%,#0e2c3c55 100%),radial-gradient(ellipse at 75% 25%,#fff8c733,transparent 24%)}
+.hospital-art{position:relative;z-index:1}
+.scene-speech{background:#f0f6ff;color:#1c2d4c;border-color:#1c2d4c;box-shadow:4px 4px 0 #0c1b35}
+.scene-speech:after{background:#f0f6ff;border-color:#1c2d4c}
+.scene-live-badge{background:#132745;color:#e6f4ff;border-color:#83b9e9;box-shadow:2px 2px 0 #0b1830}
+.scene-action{background:#1a2e50;color:#e8f3ff;border-color:#5b77a3;box-shadow:3px 3px 0 #0b172d}
+.scene-action small{color:#aec5e6}
+.scene-action.active{background:#294c72;border-color:#b2e9ff;box-shadow:4px 5px 0 #0b172d}
+.action-number{background:#304f7b;color:#f4f9ff;border-color:#769bc7}
+.scene-action:nth-child(2) .action-number{background:#63405f}.scene-action:nth-child(3) .action-number{background:#24665e}.scene-action:nth-child(4) .action-number{background:#68552e}
+.cartoon-stage .cartoon-steps .active{color:#b4f3ee}
+@keyframes sky-drift{0%{background-position:0% 10%,100% 0%,50% 0%}100%{background-position:100% 80%,0% 100%,50% 100%}}
+/* Parallax-inspired vector landscape behind the hospital */
+.live-world .landscape-art{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.landscape-art .far-hills{animation:hill-float 24s ease-in-out infinite alternate;transform-origin:center}
+.landscape-art .near-hills{animation:hill-float 17s ease-in-out infinite alternate-reverse;transform-origin:center}
+.landscape-art .floating-cloud{animation:cloud-float 22s ease-in-out infinite alternate;transform-origin:center}
+.landscape-art .floating-cloud.cloud-b{animation-duration:31s;animation-direction:alternate-reverse}
+.landscape-art .tiny-stars{animation:stars-twinkle 4s ease-in-out infinite alternate}
+@keyframes hill-float{from{transform:translateX(-13px)}to{transform:translateX(17px)}}
+@keyframes cloud-float{from{transform:translateX(-32px)}to{transform:translateX(42px)}}
+@keyframes stars-twinkle{from{opacity:.35}to{opacity:.95}}
+@media(prefers-reduced-motion:reduce){body:before,.landscape-art *{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -95,6 +143,21 @@ body{background-color:#fff9f0;background-image:radial-gradient(#c8d5f3 1.2px,tra
 <div class="grid metrics" id="metrics"></div>
 <div class="grid bottomgrid"><div class="panel"><div class="panelhead"><h2>Recent simulation runs</h2><span class="tag">LOCAL SESSION</span></div><div class="tablewrap"><table><thead><tr><th>RUN ID</th><th>SCENARIO</th><th>DETECTED</th><th>STATUS</th></tr></thead><tbody id="recentRuns"><tr><td colspan="4" class="muted">No runs yet. Start with a scenario.</td></tr></tbody></table></div></div><div class="panel"><div class="panelhead"><h2>Quick start</h2><span class="tag">RULE-BASED</span></div><p class="sub" style="font-size:11px;margin-bottom:16px">Choose a synthetic failure mode, then run the same deterministic scenario with different safeguards.</p><div class="controlrow"><select class="field" id="quickScenario" aria-label="Quick start scenario"></select><button class="btn primary" id="quickRun">Run selected →</button></div><div class="notice" style="margin-top:16px"><strong>Research note</strong><br>All patients, records, incidents, and outcomes are synthetic. This prototype demonstrates workflow safety logic, not clinical decision-making.</div></div></div></section>
 <section class="section" id="page-simulator"><div class="headrow"><div><div class="eyebrow">WORKSPACE / SIMULATOR</div><h1>Hospital Simulator</h1><p class="sub">Run controlled patient-flow scenarios across a synthetic three-department network.</p></div><div class="actions"><button class="btn" id="resetSim">Reset</button><button class="btn primary" id="runSim">▶ Run simulation</button></div></div><div class="cartoon-stage" id="cartoonStage" aria-label="Animated cartoon simulation of a synthetic hospital journey"><div class="cartoon-sky"></div><div class="cartoon-top"><span class="cartoon-label">CAREVERSE ANIME REPLAY</span><span class="cartoon-label" id="cartoonStatus">READY TO ROLL</span></div><div class="cartoon-caption" id="cartoonCaption">MEET OUR PATIENT — FOLLOW THE CARE JOURNEY</div><div class="cartoon-world live-world" id="liveWorld">
+
+<svg class="landscape-art" viewBox="0 0 1000 310" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+ <defs>
+  <linearGradient id="coolSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#203963"/><stop offset="1" stop-color="#84b9ce"/></linearGradient>
+  <linearGradient id="coolHill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6f9bc2"/><stop offset="1" stop-color="#456e99"/></linearGradient>
+  <linearGradient id="coolHill2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4a9a91"/><stop offset="1" stop-color="#286b70"/></linearGradient>
+ </defs>
+ <circle cx="865" cy="53" r="25" fill="#c8efff" opacity=".92"/>
+ <circle cx="865" cy="53" r="39" fill="#a3e4ff" opacity=".12"/>
+ <g class="floating-cloud" fill="#d8f1ff" opacity=".55"><path d="M70 75c-23 0-25-25-4-30 6-22 39-20 42 2 20-6 30 24 7 28z"/></g>
+ <g class="floating-cloud cloud-b" fill="#e7f7ff" opacity=".38"><path d="M755 94c-16 0-18-19-3-22 5-17 30-15 32 2 16-4 23 18 6 20z"/></g>
+ <g class="far-hills"><path d="M-40 205 100 105 193 170 328 81 465 184 592 112 728 180 850 98 1040 210V330H-40Z" fill="url(#coolHill)" opacity=".86"/><path d="m65 131 35-26 36 29-29-8-10 11-10-10zM286 112l42-31 42 31-35-10-9 12-13-9zM810 126l40-28 39 30-32-10-10 11-12-9z" fill="#d4f0ff" opacity=".72"/></g>
+ <g class="near-hills"><path d="M-20 228 130 167 243 215 382 152 525 224 665 164 790 222 930 157 1030 210V330H-20Z" fill="url(#coolHill2)"/><path d="M0 263q150-54 290 3t270-1 250-3 220 6v72H0Z" fill="#235b68" opacity=".7"/></g>
+ <g class="tiny-stars" fill="#e5f8ff"><circle cx="175" cy="45" r="2"/><circle cx="250" cy="81" r="1.5"/><circle cx="600" cy="45" r="2"/><circle cx="685" cy="69" r="1.5"/><circle cx="940" cy="125" r="2"/></g>
+</svg>
 <svg class="hospital-art" viewBox="0 0 1000 310" role="img" aria-label="Animated cartoon hospital with an ambulance, patient, doctor and care team">
 <defs>
  <linearGradient id="wall" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#fff" /><stop offset="1" stop-color="#dbe6ff"/></linearGradient>
