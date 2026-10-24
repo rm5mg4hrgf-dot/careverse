@@ -149,6 +149,28 @@ button:hover,.btn:hover{filter:brightness(1.13);box-shadow:0 5px 24px rgba(105,2
 @media(max-width:700px){#cv-motion-toggle{right:10px;bottom:10px;padding:9px 11px}}
 @media(prefers-reduced-motion:reduce){#cv-motion-toggle:hover{transform:none}}
 
+
+/* CAREVERSE anime hospital redesign — warm clinical palette, not blue */
+:root{color-scheme:light;--bg:#fff8f4;--panel:rgba(255,250,247,.91);--panel2:rgba(255,239,232,.92);--line:rgba(220,143,127,.32);--text:#493b43;--muted:#8b747d;--teal:#52bda8;--cyan:#7bcbbd;--amber:#ffb85c;--red:#ed7180;--violet:#b99ae8;--pink:#ff9eb5;--lime:#a7d98a;--radius:18px}
+body{color:var(--text);background:transparent}
+#cv-landscape-shade{background:linear-gradient(105deg,rgba(255,245,237,.30),rgba(255,239,230,.12) 48%,rgba(255,224,232,.19)),linear-gradient(180deg,rgba(255,250,238,.02),rgba(255,238,231,.25))}
+.sidebar{background:rgba(255,249,246,.82)!important;border-right-color:rgba(222,155,142,.32)!important;box-shadow:8px 0 36px rgba(154,105,100,.06)}
+.card,.panel,.metric,.stat-card,.section-card,.widget,.tile,.surface{background:rgba(255,251,249,.82)!important;border-color:rgba(224,163,150,.36)!important;box-shadow:0 12px 35px rgba(154,105,100,.07)}
+h1,h2,h3,.brand-name,.nav button.active{color:#63454e}
+.nav button.active{background:linear-gradient(110deg,rgba(255,158,181,.30),rgba(132,213,191,.30))!important;border-color:rgba(222,145,143,.45)!important}
+button,.btn{color:#624b52}
+button:hover,.btn:hover{box-shadow:0 5px 24px rgba(255,158,181,.25)}
+#cv-motion-toggle{border:1px solid rgba(223,145,145,.55);color:#68454f;background:linear-gradient(115deg,rgba(255,238,229,.97),rgba(255,215,225,.97),rgba(218,248,234,.97));box-shadow:0 8px 28px rgba(171,112,118,.18);font:700 11px Inter,system-ui,sans-serif}
+#cv-motion-toggle .cv-dot{background:#50b99c;box-shadow:0 0 12px #8ce0c2}
+#cv-motion-toggle .cv-dot.off{background:#ed9a8b;box-shadow:0 0 12px #ed9a8b}
+#cv-medical-floaters{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cv-med-floater{position:absolute;display:grid;place-items:center;width:clamp(42px,5vw,72px);height:clamp(42px,5vw,72px);border:1px solid rgba(255,255,255,.76);border-radius:23px;background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(255,239,234,.54));box-shadow:0 10px 30px rgba(176,112,121,.12),inset 0 1px 0 white;backdrop-filter:blur(6px);font-size:clamp(23px,3vw,38px);opacity:.76;animation:med-float var(--duration,15s) ease-in-out infinite alternate;transform:translate3d(0,0,0);filter:drop-shadow(0 5px 10px rgba(226,151,157,.15))}
+.cv-med-floater:nth-child(3n){border-radius:50%;background:linear-gradient(145deg,rgba(231,255,245,.86),rgba(255,255,255,.62))}
+.cv-med-floater:nth-child(4n){background:linear-gradient(145deg,rgba(255,232,239,.88),rgba(255,255,255,.62))}
+@keyframes med-float{0%{transform:translate3d(0,15px,0) rotate(-9deg)}50%{transform:translate3d(16px,-23px,0) rotate(5deg)}100%{transform:translate3d(-10px,-48px,0) rotate(12deg)}}
+@media(max-width:700px){.cv-med-floater{opacity:.48}}
+@media(prefers-reduced-motion:reduce){.cv-med-floater{animation:none}}
+
 </style>
 </head>
 <body>
@@ -467,4 +489,19 @@ populateSelects();renderAll();
 })();
 </script>
 
+
+<script>
+(function(){
+ if(document.getElementById('cv-medical-floaters'))return;
+ const layer=document.createElement('div');layer.id='cv-medical-floaters';layer.setAttribute('aria-hidden','true');
+ const items=[
+  ['💉','7%','19%','17s'],['🩺','88%','22%','20s'],['🩹','83%','71%','18s'],
+  ['🧴','9%','75%','22s'],['💊','74%','42%','16s'],['🩻','93%','49%','23s'],
+  ['🫧','19%','38%','19s'],['🧸','68%','84%','24s'],['✚','48%','13%','15s'],
+  ['❤️‍🩹','37%','82%','21s'],['🧪','57%','68%','18s'],['🌸','27%','14%','20s']
+ ];
+ items.forEach((it,i)=>{const el=document.createElement('div');el.className='cv-med-floater';el.textContent=it[0];el.style.left=it[1];el.style.top=it[2];el.style.setProperty('--duration',it[3]);el.style.animationDelay=(-i*1.7)+'s';el.style.opacity=(.42+(i%4)*.12).toFixed(2);layer.appendChild(el)});
+ document.body.appendChild(layer);
+})();
+</script>
 </body></html>
